@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barnard · Yeeles Family Tree</title>
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --border: #ddd8ce;
+    --text-primary: #1a1714;
+    --text-secondary: #5a534a;
+    --text-muted: #8a7f73;
+    --male-border: #2c6e9b;
+    --male-bg: #e8f2f9;
+    --female-border: #9b3d6e;
+    --female-bg: #f9e8f0;
+    --unknown-border: #9a8f82;
+    --unknown-bg: #f0ebe3;
+    --you-border: #1e6b4a;
+    --you-bg: #e8f5ee;
+    --line: #b8b0a4;
+    --deceased-opacity: 0.88;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body { font-family: Georgia, serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    padding: 20px 28px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  header h1 { font-size: 1.45rem; font-weight: normal; letter-spacing: 0.02em; }
+  header p { font-family: 'Helvetica Neue', sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
+
+  .legend {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    font-family: 'Helvetica Neue', sans-serif; font-size: 0.75rem; color: var(--text-secondary);
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .ld { width: 11px; height: 11px; border-radius: 50%; border: 2px solid; flex-shrink: 0; }
+  .ld.male { background: var(--male-bg); border-color: var(--male-border); }
+  .ld.female { background: var(--female-bg); border-color: var(--female-border); }
+  .ld.unknown { background: var(--unknown-bg); border-color: var(--unknown-border); border-style: dashed; }
+  .ld.you { background: var(--you-bg); border-color: var(--you-border); }
+
+  /* ── TREE LAYOUT ── */
+  .tree-scroll { overflow-x: auto; padding: 32px 20px 20px; }
+  .tree-root { min-width: 1400px; }
+
+  /* Generation label */
+  .gen-label {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 0.65rem; letter-spacing: 0.13em; text-transform: uppercase;
+    color: var(--text-muted); text-align: center; margin-bottom: 14px;
+  }
+
+  /* Row of people */
+  .gen-row { display: flex; justify-content: center; align-items: flex-start; gap: 0; }
+
+  /* Person card */
+  .card {
+    width: 148px; background: var(--surface);
+    border-radius: 9px; border: 2px solid var(--border);
+    padding: 11px 10px; text-align: center; position: relative;
+    transition: box-shadow 0.2s, transform 0.15s; cursor: default; flex-shrink: 0;
+  }
+  .card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.13); transform: translateY(-2px); }
+  .card.male { border-color: var(--male-border); background: var(--male-bg); }
+  .card.female { border-color: var(--female-border); background: var(--female-bg); }
+  .card.unknown { border-color: var(--unknown-border); background: var(--unknown-bg); border-style: dashed; opacity: 0.72; }
+  .card.you { border-color: var(--you-border); background: var(--you-bg); border-width: 2.5px; }
+  .card.deceased { opacity: var(--deceased-opacity); }
+
+  .card-icon {
+    width: 38px; height: 38px; border-radius: 50%;
+    margin: 0 auto 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; border: 2px solid;
+  }
+  .male .card-icon { background: #c2dced; border-color: #5aa0cc; }
+  .female .card-icon { background: #edcade; border-color: #c06090; }
+  .unknown .card-icon { background: #ddd5c8; border-color: #9a8f82; }
+  .you .card-icon { background: #b4ddc8; border-color: var(--you-border); }
+
+  .card-name { font-size: 0.82rem; font-weight: bold; line-height: 1.25; margin-bottom: 4px; }
+  .card-dates { font-family: 'Helvetica Neue', sans-serif; font-size: 0.68rem; color: var(--text-secondary); }
+  .card-id { font-family: 'Courier New', monospace; font-size: 0.58rem; color: var(--text-muted); background: rgba(0,0,0,0.04); border-radius: 3px; padding: 1px 4px; display: inline-block; margin-top: 3px; }
+  .you-tag { font-family: 'Helvetica Neue', sans-serif; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--you-border); font-weight: bold; margin-bottom: 3px; }
+  .card-note { font-family: 'Helvetica Neue', sans-serif; font-size: 0.64rem; color: var(--text-muted); font-style: italic; margin-top: 4px; }
+
+  /* Tooltip */
+  .tip {
+    display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: #1a1714; color: #fff; font-family: 'Helvetica Neue', sans-serif; font-size: 0.68rem;
+    padding: 7px 10px; border-radius: 6px; white-space: nowrap; z-index: 200; pointer-events: none;
+    line-height: 1.55; text-align: left; min-width: 160px;
+  }
+  .tip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #1a1714; }
+  .card:hover .tip { display: block; }
+
+  /* Couple connector (horizontal dash) */
+  .cc { width: 28px; height: 2px; background: var(--line); align-self: center; flex-shrink: 0; position: relative; }
+  .cc-label {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    background: var(--bg); color: var(--text-muted); font-size: 0.6rem; font-family: 'Helvetica Neue', sans-serif; padding: 0 2px;
+  }
+
+  /* Spacers */
+  .gap-sm { width: 20px; flex-shrink: 0; }
+  .gap-md { width: 60px; flex-shrink: 0; }
+  .gap-lg { width: 100px; flex-shrink: 0; }
+  .gap-xl { width: 160px; flex-shrink: 0; }
+
+  /* Vertical connector block */
+  .vc { display: flex; justify-content: center; }
+  .vc svg { overflow: visible; }
+
+  /* ── SIBLINGS ROW ── */
+  .siblings-row {
+    display: flex; justify-content: center; align-items: flex-start;
+    gap: 8px; margin-top: 0; flex-wrap: wrap; max-width: 1000px; margin: 0 auto;
+  }
+  .sib-card {
+    width: 90px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 7px; padding: 8px 6px; text-align: center; font-family: 'Helvetica Neue', sans-serif;
+    font-size: 0.68rem; color: var(--text-secondary); opacity: 0.75;
+  }
+  .sib-card.highlight { border-color: var(--female-border); background: var(--female-bg); opacity: 1; font-weight: bold; color: var(--text-primary); }
+
+  /* ── NOTES ── */
+  .notes { max-width: 1000px; margin: 32px auto 40px; padding: 0 20px; }
+  .notes h2 { font-size: 1rem; font-weight: normal; letter-spacing: 0.04em; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 680px) { .notes-grid { grid-template-columns: 1fr; } }
+  .note { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 18px; }
+  .note h3 { font-size: 0.78rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); font-family: 'Helvetica Neue', sans-serif; margin-bottom: 10px; }
+  .note p, .note li { font-size: 0.78rem; line-height: 1.6; color: var(--text-secondary); font-family: 'Helvetica Neue', sans-serif; }
+  .note ul { padding-left: 14px; margin-top: 6px; }
+  .note li { margin-bottom: 4px; }
+  .note a { color: var(--male-border); text-decoration: none; }
+  .note a:hover { text-decoration: underline; }
+  .step { background: #eef4fa; border-left: 3px solid #5aa0cc; padding: 7px 10px; margin: 7px 0; border-radius: 0 5px 5px 0; font-size: 0.73rem; font-family: 'Helvetica Neue', sans-serif; color: var(--text-secondary); line-height: 1.5; }
+  .new-tag { display: inline-block; background: #d4edda; color: #1a5c30; font-size: 0.6rem; font-weight: bold; letter-spacing: 0.07em; text-transform: uppercase; border-radius: 3px; padding: 1px 5px; margin-left: 5px; vertical-align: middle; }
+  .source-tag { display: inline-block; background: #fff3cd; color: #856404; font-size: 0.6rem; font-weight: bold; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 3px; padding: 1px 5px; margin-left: 4px; }
+
+  /* Section divider */
+  .section-divider {
+    text-align: center; margin: 10px 0 6px;
+    font-family: 'Helvetica Neue', sans-serif; font-size: 0.7rem;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Barnard &amp; Yeeles Family Tree</h1>
+    <p>7 generations on the Yeeles side · Henry's father Isaac Yeeles (b.1807) newly discovered · Barnard branch researched · Aunts, uncles &amp; siblings added · Updated August 2026 · Sources: Kevin Yeeles's MyHeritage tree, FamilySearch, FreeBMD + handwritten family records</p>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="ld you"></div> You (James)</div>
+    <div class="legend-item"><div class="ld male"></div> Male</div>
+    <div class="legend-item"><div class="ld female"></div> Female</div>
+    <div class="legend-item"><div class="ld unknown"></div> To research</div>
+  </div>
+</header>
+
+<div class="tree-scroll">
+<div class="tree-root">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  YEELES SIDE                                            -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<div class="section-divider" style="margin-bottom:16px;">— Yeeles Branch —</div>
+
+<!-- GEN -1: Isaac Yeeles + Hannah Hibbert — NEW DISCOVERY via Kevin's MyHeritage tree -->
+<div class="gen-label">Great-great-great-great-grandparents · Yeeles Branch <span style="color:#c07000; font-style:italic; text-transform:none; letter-spacing:0;">★ New discovery Aug 2026</span></div>
+<div class="gen-row">
+  <div class="card male deceased">
+    <div class="card-icon">♂</div>
+    <div class="card-name">Isaac Yeeles</div>
+    <div class="card-dates">b. 1807 · Marshfield, Gloucestershire</div>
+    <div class="card-dates" style="margin-top:2px;">d. 1851 (aged ~44)</div>
+    <div class="tip">Isaac Yeeles<br>b. 1807, Marshfield, Gloucestershire<br>d. 1851, aged ~44<br>Married Hannah Hibbert (b.1803)<br>Father of Henry Yeeles (b.1830)<br>Source: Kevin Yeeles's MyHeritage tree ("Dickenson Web Site")<br>Confirmed: 1851 residence, Marshfield</div>
+  </div>
+  <div class="cc"><span class="cc-label">m.~1828</span></div>
+  <div class="card female deceased">
+    <div class="card-icon">♀</div>
+    <div class="card-name">Hannah Hibbert</div>
+    <div class="card-dates">1803 – 1884 (aged 81)</div>
+    <div class="tip">Hannah Hibbert<br>b. 1803 (Gloucestershire area)<br>d. 1884, aged ~81<br>Married Isaac Yeeles<br>Mother of Henry Yeeles (b.1830)<br>Previously recorded as "Hannah Yeeles b.1803/04, Old Sodbury"<br>Source: Kevin Yeeles's MyHeritage tree; 3 census years</div>
+  </div>
+</div>
+
+<!-- connector down -->
+<div class="vc" style="height:32px;">
+  <svg width="4" height="32"><line x1="2" y1="0" x2="2" y2="32" stroke="#b8b0a4" stroke-width="1.5"/></svg>
+</div>
+
+<!-- GEN 0: Henry Yeeles + Jane Dickenson (Isaac's son) -->
+<div class="gen-label">Great-great-great-grandparents · Yeeles Branch</div>
+<div class="gen-row">
+  <div class="card male deceased">
+    <div class="card-icon">♂</div>
+    <div class="card-name">Henry Yeeles</div>
+    <div class="card-dates">b. 1830 · Marshfield, Gloucestershire</div>
+    <div class="tip">Henry Yeeles<br>b. 1830, Marshfield, Gloucestershire<br>Son of Isaac Yeeles &amp; Hannah Hibbert<br>Married Jane Dickenson (b.1836)<br>Father of George Thomas Yeeles (b.1865)<br>Children: Elizabeth (1859), George Thomas (1865),<br>Mary Selina (1867), Sarah Jane (1871), Edith Rose (1879)<br>1871 census confirms: Henry, Jane &amp; children in Marshfield<br>Source: Kevin Yeeles's MyHeritage tree; FamilySearch 1871 Census</div>
+  </div>
+  <div class="cc"><span class="cc-label">m.~1858</span></div>
+  <div class="card female deceased">
+    <div class="card-icon">♀</div>
+    <div class="card-name">Jane Dickenson</div>
+    <div class="card-dates">b. 1836 · Gloucestershire</div>
+    <div class="tip">Jane Dickenson<br>b. 1836, Gloucestershire<br>Married Henry Yeeles c.1858<br>Mother of George Thomas Yeeles<br>The "Dickenson" in Kevin's "Dickenson Web Site" refers to her maiden name<br>Listed as "Jane Yeeles" in 1871 census<br>Source: Kevin Yeeles's MyHeritage tree; FamilySearch</div>
+  </div>
+</div>
+
+<!-- connector down -->
+<div class="vc" style="height:32px;">
+  <svg width="4" height="32"><line x1="2" y1="0" x2="2" y2="32" stroke="#b8b0a4" stroke-width="1.5"/></svg>
+</div>
+
+<!-- GEN 1: George Yeeles + Annie Toghill -->
+<div class="gen-label">Great-great-grandparents · Yeeles Branch · Generation 1</div>
+<div class="gen-row">
+  <div class="card male deceased">
+    <div class="card-icon">♂</div>
+    <div class="card-name">George Thomas Yeeles</div>
+    <div class="card-dates">1865 – 1940 (aged 75)</div>
+    <div class="tip">George Thomas Yeeles<br>Born March 1865, Marshfield, Gloucestershire<br>Died 26 Feb 1940, Bath, Somerset<br>Son of Henry Yeeles &amp; Jane Dickenson<br>Married Annie Maria Toghill 1892<br>Source: handwritten family records; FamilySearch 1871 census</div>
+  </div>
+  <div class="cc"><span class="cc-label">m.1892</span></div>
+  <div class="card female deceased">
+    <div class="card-icon">♀</div>
+    <div class="card-name">Annie Maria Toghill</div>
+    <div class="card-dates">1871 – 1954 (aged 83)</div>
+    <div class="tip">Annie Maria Toghill<br>Born 1871 · Died 1954<br>Married George Yeeles 1892<br>Source: handwritten family records</div>
+  </div>
+</div>
+
+<!-- Down connector + siblings note -->
+<div class="vc" style="height:44px;">
+  <svg width="4" height="44"><line x1="2" y1="0" x2="2" y2="44" stroke="#b8b0a4" stroke-width="1.5"/></svg>
+</div>
+<div style="text-align:center; font-family:'Helvetica Neue',sans-serif; font-size:0.7rem; color:var(--text-muted); margin-bottom:10px;">
+  Children: Agnes (1894–1894 ✝) · <strong>Herbert</strong> (1897–1929) · Violet (1901–1976) · Ewart (1904–1906 ✝)
+</div>
+
+<!-- GEN 2: Herbert Yeeles + Elsie Dixon Weichel -->
+<div class="gen-label">Great-grandparents · Generation 2</div>
+<div class="gen-row">
+  <div class="card male deceased">
+    <div class="card-icon">♂</div>
+    <div class="card-name">Herbert Yeeles</div>
+    <div class="card-dates">1897 – 1929 (aged 32)</div>
+    <div class="card-note">Son of George &amp; Annie</div>
+    <div class="tip">Herbert Yeeles<br>Born 1897 · Died 1929, aged 32<br>Son of George Thomas Yeeles<br>Married Elsie Lavina Dixon Weichel 1916<br>Source: handwritten family records</div>
+  </div>
+  <div class="cc"><span class="cc-label">m.1916</span></div>
+  <div class="card female deceased">
+    <div class="card-icon">♀</div>
+    <div class="card-name">Elsie Lavina Dixon Weichel</div>
+    <div class="card-dates">b. c.1895</div>
+    <div class="tip">Elsie Lavina Dixon Weichel<br>Married Herbert Yeeles 1916<br>Source: handwritten family records</div>
+  </div>
+</div>
+
+<!-- Down connector -->
+<div class="vc" style="height:44px;">
+  <svg width="4" height="44"><line x1="2" y1="0" x2="2" y2="44" stroke="#b8b0a4" stroke-width="1.5"/></svg>
+</div>
+<div style="text-align:center; font-family:'Helvetica Neue',sans-serif; font-size:0.7rem; color:var(--text-muted); margin-bottom:10px;">
+  Children: Betty Yvonne (1921–2011) · <strong>Raymond</strong> (1926–2018)
+</div>
+
+<!-- GEN 3: Raymond Yeeles + Emily Litster -->
+<div class="gen-label">Grandparents (maternal) · Generation 3</div>
+<div class="gen-row">
+  <div class="card male deceased">
+    <div class="card-icon">♂</div>
+    <div class="card-name">Raymond Yeeles</div>
+    <div class="card-dates">1926 – 2018 (aged 92)</div>
+    <div class="card-note">Son of Herbert &amp; Elsie</div>
+    <div class="tip">Raymond Yeeles<br>Born 1926 · Died 2018, aged 92<br>Son of Herbert Yeeles<br>Married Emily Christine Litster 1948<br>Source: handwritten family records</div>
+  </div>
+  <div class="cc"><span class="cc-label">m.1948</span></div>
+  <div class="card female deceased">
+    <div class="card-icon">♀</div>
+    <div class="card-name">Emily Christine Litster</div>
+    <div class="card-dates">b. c.1926</div>
+    <div class="card-note">"Bunty"</div>
+    <div class="tip">Emily Christine Litster<br>Known as "Bunty"<br>Married Raymond Yeeles 1948<br>Source: handwritten family records</div>
+  </div>
+</div>
+
+<!-- Down connector -->
+<div class="vc" style="height:32px;">
+  <svg width="4" height="32"><line x1="2" y1="0" x2="2" y2="32" stroke="#b8b0a4" stroke-width="1.5"/></svg>
+</div>
+
+<!-- Raymond & Emily's children (siblings row) -->
+<div class="gen-label">Children of Raymond &amp; Emily · Julie's siblings</div>
+<div class="siblings-row">
+
+  <!-- Kevin -->
+  <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+    <div class="sib-card" style="width:100px; position:relative; cursor:default;">
+      <div style="font-weight:bold; color:var(--text-primary); font-size:0.72rem;">Kevin R Yeeles</div>
+      <div style="font-size:0.6rem; color:var(--text-muted);">m. Valerie M</div>
+      <div style="font-size:0.58rem; color:var(--text-muted); font-style:italic;">Aylesford, Kent</div>
+      <div class="tip" style="min-width:190px; bottom:calc(100% + 6px);">Kevin R Yeeles<br>Married Valerie M Yeeles<br>Children: Nerissa Y &amp; Francesca Elaine<br>Electoral roll: Aylesford, Kent (ME20)<br>Francesca now in York (YO10)</div>
+    </div>
+    <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.58rem; color:var(--text-muted); text-align:center;">Nerissa · Francesca</div>
+  </div>
+
+  <div class="sib-card">Lorraine</div>
+  <div class="sib-card highlight">Julie ★</div>
+  <div class="sib-card">Mark</div>
+  <div class="sib-card">Kathy</div>
+  <div class="sib-card">Peter</div>
+  <div class="sib-card">David</div>
+  <div class="sib-card">Martin</div>
+  <div class="sib-card">Helen</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  PARENTS GENERATION                                     -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<!-- Connectors down to parents — single dashed line from Yeeles/Julie side -->
+<div style="height:44px; width:100%; position:relative; margin-top:4px;">
+  <svg width="100%" height="44" style="overflow:visible;">
+    <line x1="67%" y1="0" x2="67%" y2="44" stroke="#b8b0a4" stroke-width="1.5" stroke-dasharray="4,3"/>
+  </svg>
+</div>
+
+<div class="section-divider">— Your Parents —</div>
+
+<!-- GEN 4: Richard + Julie (with Barnard mini-tree on left) -->
+<div class="gen-label">Parents · Generation 4</div>
+<div class="gen-row" style="align-items:flex-start;">
+
+  <!-- Barnard family mini-tree: 2 generations embedded in the parents row -->
+  <div style="display:flex; flex-direction:column; align-items:center; margin-right:28px; gap:0;">
+
+    <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.58rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); margin-bottom:7px; text-align:center;">Great-great-grandparents · Barnard</div>
+
+    <!-- Mark Barnard + Mary Elizabeth Booth -->
+    <div style="display:flex; align-items:center; gap:0;">
+      <div class="card male deceased" style="width:122px; padding:8px 7px;">
+        <div class="card-icon" style="width:32px;height:32px;font-size:0.95rem;margin-bottom:6px;">♂</div>
+        <div class="card-name" style="font-size:0.72rem;">Mark Barnard</div>
+        <div class="card-dates">1842 – 1912 · Suffolk</div>
+        <div class="tip">Mark Barnard<br>b. 1842, Mutford, Suffolk<br>d. 1912<br>Married Mary Elizabeth Booth<br>1871, Mutford, Suffolk<br>Father of Ernest Thomas Barnard<br>Source: FamilySearch (9CJX-77M)</div>
+      </div>
+      <div class="cc" style="width:24px;"><span class="cc-label">m.1871</span></div>
+      <div class="card female deceased" style="width:122px; padding:8px 7px;">
+        <div class="card-icon" style="width:32px;height:32px;font-size:0.95rem;margin-bottom:6px;">♀</div>
+        <div class="card-name" style="font-size:0.72rem;">Mary Elizabeth Booth</div>
+        <div class="card-dates">b. 1844 · Suffolk</div>
+        <div class="tip">Mary Elizabeth Booth<br>b. 1844<br>Married Mark Barnard 1871<br>Mutford, Suffolk<br>Mother of Ernest Thomas Barnard<br>Source: FamilySearch (9CJX-77M)</div>
+      </div>
+    </div>
+
+    <!-- vertical connector -->
+    <div style="width:2px; height:20px; background:var(--line);"></div>
+
+    <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.58rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); margin-bottom:7px; text-align:center;">Great-grandparents · Barnard</div>
+
+    <!-- Ernest Thomas Barnard + Mabel May Rackham -->
+    <div style="display:flex; align-items:center; gap:0;">
+      <div class="card male deceased" style="width:122px; padding:8px 7px;">
+        <div class="card-icon" style="width:32px;height:32px;font-size:0.95rem;margin-bottom:6px;">♂</div>
+        <div class="card-name" style="font-size:0.72rem;">Ernest Thomas Barnard</div>
+        <div class="card-dates">b. c.1876 · Suffolk</div>
+        <div class="tip">Ernest Thomas Barnard<br>b. c.1876, Suffolk<br>Married Mabel May Rackham<br>June 1900 · Mutford, Suffolk<br>GRO Vol 4a, Page 1988<br>Source: FreeBMD</div>
+      </div>
+      <div class="cc" style="width:24px;"><span class="cc-label">m.1900</span></div>
+      <div class="card female deceased" style="width:122px; padding:8px 7px;">
+        <div class="card-icon" style="width:32px;height:32px;font-size:0.95rem;margin-bottom:6px;">♀</div>
+        <div class="card-name" style="font-size:0.72rem;">Mabel May Rackham</div>
+        <div class="card-dates">b. c.1878 · Suffolk</div>
+        <div class="tip">Mabel May Rackham<br>b. c.1878, Suffolk<br>Married Ernest Thomas Barnard<br>June 1900 · Mutford, Suffolk<br>GRO Vol 4a, Page 1988<br>Source: FreeBMD</div>
+      </div>
+    </div>
+
+    <!-- vertical connector -->
+    <div style="width:2px; height:20px; background:var(--line);"></div>
+
+    <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.58rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); margin-bottom:7px; text-align:center;">Grandparents · Barnard</div>
+
+    <!-- Air Cdre. John Owen Barnard + unknown wife -->
+    <div style="display:flex; align-items:center; gap:0;">
+      <div class="card male deceased" style="width:122px; padding:8px 7px;">
+        <div class="card-icon" style="width:32px;height:32px;font-size:0.95rem;margin-bottom:6px;">♂</div>
+        <div class="card-name" style="font-size:0.72rem;">Air Cdre. John Owen Barnard</div>
+        <div class="card-dates">21 May 1917 – 12 May 2003</div>
+        <div class="card-note">CBE, OBE · RAF</div>
+        <div class="tip">Air Commodore John Owen Barnard CBE OBE<br>Born 21 May 1917, Mutford, Suffolk<br>Died 12 May 2003, Surrey<br>Son of Ernest Thomas Barnard<br>&amp; Mabel May Rackham<br>Richard's father · Your paternal grandfather<br>Source: RAF records + FreeBMD</div>
+      </div>
+      <div class="cc" style="width:24px;"><span class="cc-label">m.?</span></div>
+      <div class="card female deceased" style="width:122px; padding:8px 7px;">
+        <div class="card-icon" style="width:32px;height:32px;font-size:0.95rem;margin-bottom:6px;">♀</div>
+        <div class="card-name" style="font-size:0.72rem;">Elizabeth Barnard</div>
+        <div class="card-dates">~ 1918–1930</div>
+        <div class="card-note">Richard's mother</div>
+        <div class="tip">Elizabeth Barnard (née unknown)<br>Wife of Air Cdre. John Owen Barnard<br>Richard's mother · Your paternal grandmother<br>Surname before marriage to research</div>
+      </div>
+    </div>
+
+    <!-- vertical connector to children -->
+    <div style="width:2px; height:16px; background:var(--line);"></div>
+
+    <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.58rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); margin-bottom:6px; text-align:center;">JO &amp; Elizabeth's children</div>
+
+    <!-- Nick · Richard★ (twin) · Judy (twin → Brueton) -->
+    <div style="display:flex; gap:5px; justify-content:center; align-items:flex-start;">
+
+      <!-- Nick Barnard -->
+      <div style="width:76px; background:var(--male-bg); border:1px solid var(--male-border); border-radius:6px; padding:6px 4px; text-align:center; font-family:'Helvetica Neue',sans-serif; opacity:0.82;">
+        <div style="font-size:0.68rem; font-weight:bold; color:var(--text-primary);">Nick</div>
+        <div style="font-size:0.6rem; color:var(--text-muted);">Barnard</div>
+      </div>
+
+      <!-- Richard Barnard — father, twin -->
+      <div style="width:76px; background:var(--male-bg); border:2px solid var(--male-border); border-radius:6px; padding:6px 4px; text-align:center; font-family:'Helvetica Neue',sans-serif;">
+        <div style="font-size:0.5rem; color:var(--male-border); font-weight:bold; letter-spacing:0.07em; text-transform:uppercase; margin-bottom:1px;">Father ★</div>
+        <div style="font-size:0.68rem; font-weight:bold; color:var(--text-primary);">Richard</div>
+        <div style="font-size:0.6rem; color:var(--text-muted);">Barnard</div>
+        <div style="font-size:0.55rem; color:var(--text-muted); font-style:italic; margin-top:2px;">twin</div>
+      </div>
+
+      <!-- Judy Barnard → Brueton (twin) -->
+      <div style="width:76px; background:var(--female-bg); border:1px solid var(--female-border); border-radius:6px; padding:6px 4px; text-align:center; font-family:'Helvetica Neue',sans-serif; opacity:0.82; position:relative; cursor:default;">
+        <div style="font-size:0.68rem; font-weight:bold; color:var(--text-primary);">Judith E A</div>
+        <div style="font-size:0.6rem; color:var(--text-muted);">Barnard</div>
+        <div style="font-size:0.58rem; color:var(--text-muted);">b. 27 Mar 1952</div>
+        <div style="font-size:0.55rem; color:var(--text-muted); font-style:italic; margin-top:2px;">twin · m. Brueton</div>
+        <div style="font-size:0.52rem; color:var(--text-muted); margin-top:2px;">Hannah · James · Alexander</div>
+        <div class="tip" style="min-width:180px;">Judith Elizabeth Ann Barnard<br>b. 27 March 1952, Carlisle<br>Twin sister of Richard<br>Married Nigel B Brueton<br>Lives in Cobham, Surrey<br>Children: Hannah, James &amp; Alexander Brueton<br>(your cousins)</div>
+      </div>
+
+    </div>
+
+  </div><!-- /Barnard mini-tree -->
+
+  <!-- Richard -->
+  <div class="card male">
+    <div class="card-icon">♂</div>
+    <div class="card-name">Richard Mark Barnard</div>
+    <div class="card-dates">27 March 1952 · Living</div>
+    <div class="card-id">G1LW-7QN</div>
+    <div class="tip">Richard Mark Barnard<br>Born 27 March 1952<br>Carlisle, Cumberland, England<br>FamilySearch: G1LW-7QN</div>
+  </div>
+  <div class="cc"><span class="cc-label">m.</span></div>
+  <!-- Julie -->
+  <div class="card female">
+    <div class="card-icon">♀</div>
+    <div class="card-name">Julie Yeeles</div>
+    <div class="card-dates">22 July 1954 · Living</div>
+    <div class="card-id">G1L7-HRW</div>
+    <div class="tip">Julie Yeeles<br>Born 22 July 1954<br>Daughter of Raymond Yeeles &amp; Emily Litster<br>FamilySearch: G1L7-HRW</div>
+  </div>
+
+</div>
+
+<!-- Connector down to children -->
+<div style="height:52px; width:100%; max-width:700px; margin: 0 auto; position:relative;">
+  <svg width="100%" height="52" style="overflow:visible;">
+    <line x1="50%" y1="0" x2="50%" y2="22" stroke="#b8b0a4" stroke-width="1.5"/>
+    <line x1="20%" y1="22" x2="80%" y2="22" stroke="#b8b0a4" stroke-width="1.5"/>
+    <line x1="20%" y1="22" x2="20%" y2="52" stroke="#b8b0a4" stroke-width="1.5"/>
+    <line x1="50%" y1="22" x2="50%" y2="52" stroke="#b8b0a4" stroke-width="1.5"/>
+    <line x1="80%" y1="22" x2="80%" y2="52" stroke="#b8b0a4" stroke-width="1.5"/>
+  </svg>
+</div>
+
+<!-- GEN 5: Children -->
+<div class="gen-label">Children · Generation 5</div>
+<div class="gen-row" style="gap:40px; justify-content:center;">
+
+  <div class="card you">
+    <div class="you-tag">You</div>
+    <div class="card-icon">♂</div>
+    <div class="card-name">James Barnard</div>
+    <div class="card-dates">b. 1976 · Living</div>
+    <div class="card-id">G1L7-5Q5</div>
+    <div class="tip">James Barnard<br>Born 1976 · Living<br>FamilySearch: G1L7-5Q5</div>
+  </div>
+
+  <div class="card female">
+    <div class="card-icon">♀</div>
+    <div class="card-name">Charlotte Barnard</div>
+    <div class="card-dates">b. 1983 · Living</div>
+    <div class="card-id">G1L7-HRZ</div>
+    <div class="tip">Charlotte Barnard<br>Born 1983 · Living<br>FamilySearch: G1L7-HRZ</div>
+  </div>
+
+  <div class="card female" style="border-color:#c88000; background:#fff8e8;">
+    <div class="card-icon" style="background:#ffe8b0; border-color:#c88000;">♀</div>
+    <div class="card-name">Olivia</div>
+    <div class="card-dates">b. 1995 · Living</div>
+    <div class="card-note" style="color:#a06000;">Not yet in FamilySearch tree</div>
+    <div class="tip">Olivia<br>Born 1995 · Living<br>From handwritten family records<br>⚠ Not yet added to FamilySearch tree</div>
+  </div>
+
+</div>
+
+</div><!-- tree-root -->
+</div><!-- tree-scroll -->
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!--  NOTES                                                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="notes">
+  <h2>Research Notes &amp; Next Steps</h2>
+  <div class="notes-grid">
+
+    <div class="note">
+      <h3>✅ Yeeles Branch — What We Now Know <span class="new-tag">New</span></h3>
+      <p>Thanks to the handwritten family records, the Yeeles side goes back 5 generations to <strong>George Thomas Yeeles (b.1865)</strong>:</p>
+      <ul>
+        <li><strong>George Thomas Yeeles</strong> (1865–1940) m. Annie Maria Toghill (1871–1954) in 1892</li>
+        <li>→ Son <strong>Herbert Yeeles</strong> (1897–1929) m. Elsie Lavina Dixon Weichel in 1916</li>
+        <li>→ Son <strong>Raymond Yeeles</strong> (1926–2018) m. Emily Christine "Bunty" Litster in 1948</li>
+        <li>→ Daughter <strong>Julie Yeeles</strong> (b. 1954) — your mother</li>
+      </ul>
+      <p style="margin-top:8px;">Raymond had 9 children: Kevin, Lorraine, Julie, Mark, Kathy, Peter, David, Martin, Helen.</p>
+      <p style="margin-top:6px;"><strong>Kevin R Yeeles</strong> married <strong>Valerie M Yeeles</strong>. Their daughters are <strong>Nerissa Y Yeeles</strong> and <strong>Francesca Elaine Yeeles</strong>. Electoral roll places them in Aylesford, Kent (ME20) in 2002–03. Francesca has since moved to York (YO10 4AD). Source: 192.com electoral roll; Companies House.</p>
+      <p style="margin-top:6px;">Source: <span class="source-tag">Handwritten family records</span></p>
+    </div>
+
+    <div class="note">
+      <h3>✅ Yeeles Branch — Going Further Back <span class="new-tag">Updated Aug 2026</span></h3>
+      <p>The 1871 England census and Kevin Yeeles's MyHeritage tree (<em>Dickenson Web Site</em>) together confirm the full line:</p>
+      <ul>
+        <li><strong>Isaac Yeeles</strong> (b.1807, Marshfield, Gloucestershire; d.1851) — Henry's father. <em>New Aug 2026.</em></li>
+        <li><strong>Hannah Hibbert</strong> (b.1803; d.1884) — Isaac's wife, Henry's mother. Previously noted as "Hannah Yeeles b.1803/04, Old Sodbury"; her maiden name is now confirmed as Hibbert.</li>
+        <li><strong>Henry Yeeles</strong> (b.1830, Marshfield) — son of Isaac &amp; Hannah. Married Jane Dickenson (b.1836). Their children: Elizabeth (1859), George Thomas (1865), Mary Selina (1867), Sarah Jane (1871), Edith Rose (1879).</li>
+        <li><strong>Jane Dickenson</strong> (b.1836, Gloucestershire) — Henry's wife. The "Dickenson" in Kevin's tree title refers to her maiden name.</li>
+        <li><strong>George Thomas Yeeles</strong> (b.1865, Marshfield) — confirmed in Kevin's tree with birth location Marshfield, Gloucestershire.</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>How far back does the Yeeles family go?</strong> Isaac Yeeles (b.1807) is the oldest recorded in Kevin's tree. The Marshfield parish registers (St Mary's) show Yeeles baptisms as far back as <strong>1640</strong> — Robert and John Yeeles, sons of William Yeeles. The family has been rooted in Marshfield for nearly 400 years.</p>
+      <p style="margin-top:8px;"><strong>Still to research:</strong> Annie Maria Toghill's parents and Elsie Lavina Dixon Weichel's parents. Isaac Yeeles's parents (pre-1807) would require Marshfield parish records.</p>
+      <p style="margin-top:8px;">Source: <span class="source-tag">Kevin Yeeles's MyHeritage Tree (Dickenson Web Site)</span> <span class="source-tag">FamilySearch 1871 Census</span> <span class="source-tag">FamilySearch Births &amp; Christenings</span></p>
+    </div>
+
+    <div class="note">
+      <h3>✅ Barnard Branch — What We Now Know <span class="new-tag">New</span></h3>
+      <p>Research via <strong>FreeBMD</strong>, <strong>RAF biographical records</strong>, and <strong>FamilySearch</strong> confirmed the Barnard paternal line back four generations:</p>
+      <ul>
+        <li><strong>Air Cdre. John Owen Barnard CBE, OBE</strong> (21 May 1917 – 12 May 2003) — Richard's father, your paternal grandfather. Born Mutford district, Suffolk. Distinguished RAF career reaching Air Commodore.</li>
+        <li>→ Son of <strong>Ernest Thomas Barnard</strong> &amp; <strong>Mabel May Rackham</strong>, married June 1900 in Mutford, Suffolk (GRO Vol 4a, Page 1988 · FreeBMD).</li>
+        <li>→ Ernest was son of <strong>Mark Barnard</strong> (1842–1912) &amp; <strong>Mary Elizabeth Booth</strong> (b.1844), married 1871 in Mutford, Suffolk (FamilySearch 9CJX-77M).</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>JO &amp; Elizabeth's children:</strong> <strong>Nick Barnard</strong>, <strong>Richard Barnard</strong> (your father), and <strong>Judith Elizabeth Ann Barnard</strong> — Richard and Judy are twins, both born 27 March 1952. Judy married <strong>Nigel B Brueton</strong> and lives in Cobham, Surrey. Their children — your cousins — are <strong>Hannah</strong>, <strong>James</strong> and <strong>Alexander Brueton</strong>.</p>
+      <p style="margin-top:6px;"><strong>Still to find:</strong> Elizabeth Barnard's maiden name (JO's wife, Richard's mother). It would appear on Richard's 1952 birth certificate.</p>
+      <div class="step"><strong>Next step.</strong> Order Richard's birth certificate from the <a href="https://www.gro.gov.uk/gro/content/certificates/" target="_blank">GRO</a> — it names both parents including the mother's maiden name. Richard was born 27 March 1952, Carlisle district. Search <a href="https://www.freebmd.org.uk" target="_blank">FreeBMD.org.uk</a> → Births → Barnard → 1952 → Cumberland to find the reference number first.</div>
+      <p style="margin-top:8px;">Source: <span class="source-tag">FreeBMD</span> <span class="source-tag">RAF Records (rafweb.org)</span> <span class="source-tag">FamilySearch 9CJX-77M</span></p>
+    </div>
+
+    <div class="note">
+      <h3>⚠️ To Add to FamilySearch</h3>
+      <p>These people from your handwritten records are not yet in your FamilySearch tree:</p>
+      <ul>
+        <li><strong>Olivia</strong> (b. 1995) — your sister, not yet added</li>
+        <li><strong>Raymond Yeeles</strong> (1926–2018) — Julie's father</li>
+        <li><strong>Emily Christine "Bunty" Litster</strong> — Julie's mother</li>
+        <li><strong>Herbert Yeeles</strong> (1897–1929) — Julie's grandfather</li>
+        <li><strong>Elsie Lavina Dixon Weichel</strong> — Julie's grandmother</li>
+        <li><strong>Isaac Yeeles</strong> (b.1807, Marshfield; d.1851) &amp; <strong>Hannah Hibbert</strong> (b.1803; d.1884) — Henry's parents, now confirmed via Kevin's MyHeritage tree</li>
+        <li><strong>Henry Yeeles</strong> (b.1830, Marshfield) &amp; <strong>Jane Dickenson</strong> (b.1836) — George Thomas Yeeles's parents</li>
+        <li><strong>George Thomas Yeeles</strong> (1865–1940) — Julie's great-great-grandfather</li>
+        <li><strong>Annie Maria Toghill</strong> (1871–1954) — Julie's great-grandmother</li>
+        <li>Julie's 8 siblings (Kevin, Lorraine, Mark, Kathy, Peter, David, Martin, Helen)</li>
+        <li><strong>Air Cdre. John Owen Barnard CBE, OBE</strong> (1917–2003) — Richard's father (now confirmed)</li>
+        <li><strong>Elizabeth Barnard</strong> — Richard's mother / your paternal grandmother (first name confirmed; maiden name to find)</li>
+        <li><strong>Ernest Thomas Barnard</strong> &amp; <strong>Mabel May Rackham</strong> — JO's parents (now confirmed, married June 1900 Mutford)</li>
+        <li><strong>Mark Barnard</strong> (1842–1912) &amp; <strong>Mary Elizabeth Booth</strong> (b.1844) — Ernest's parents (confirmed via FamilySearch 9CJX-77M)</li>
+      </ul>
+      <p style="margin-top:8px;">Log into <a href="https://www.familysearch.org" target="_blank">FamilySearch.org</a> and open Julie's profile (G1L7-HRW) → Details → Family Members → Add Parent to start building upwards.</p>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
