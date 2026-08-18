@@ -1,0 +1,417 @@
+0 HEAD
+1 SOUR BarnardFamilyTree
+2 VERS 1.0
+2 NAME Barnard-Yeeles Family Tree
+1 DATE 18 AUG 2026
+1 GEDC
+2 VERS 5.5.1
+2 FORM LINEAGE-LINKED
+1 CHAR UTF-8
+1 SUBM @SUBM1@
+0 @SUBM1@ SUBM
+1 NAME James Barnard
+0 @I001@ INDI
+1 NAME James /Barnard/
+1 SEX M
+1 BIRT
+2 DATE 1976
+1 NOTE FamilySearch ID: G1L7-5Q5
+1 FAMS @F002@
+1 FAMS @F003@
+1 FAMC @F001@
+0 @I002@ INDI
+1 NAME Richard Mark /Barnard/
+1 SEX M
+1 BIRT
+2 DATE 27 MAR 1952
+1 NOTE FamilySearch ID: G1LW-7QN
+1 FAMS @F001@
+1 FAMC @F005@
+0 @I003@ INDI
+1 NAME Julie /Yeeles/
+1 SEX F
+1 BIRT
+2 DATE 22 JUL 1954
+1 NOTE FamilySearch ID: G1L7-HRW
+1 FAMS @F001@
+1 FAMS @F017@
+1 FAMC @F008@
+0 @I004@ INDI
+1 NAME Charlotte /Barnard/
+1 SEX F
+1 BIRT
+2 DATE 1983
+1 NOTE FamilySearch ID: G1L7-HRZ
+1 FAMS @F004@
+1 FAMC @F001@
+0 @I005@ INDI
+1 NAME Daniel /Lipman/
+1 SEX M
+1 FAMS @F004@
+0 @I006@ INDI
+1 NAME Albie /Lipman/
+1 SEX M
+1 BIRT
+2 DATE 2013
+1 FAMC @F004@
+0 @I007@ INDI
+1 NAME Millie /Lipman/
+1 SEX F
+1 BIRT
+2 DATE 2015
+1 FAMC @F004@
+0 @I008@ INDI
+1 NAME Austin /Lipman/
+1 SEX M
+1 BIRT
+2 DATE 2020
+1 FAMC @F004@
+0 @I009@ INDI
+1 NAME Veronica /Lechuga/
+1 SEX F
+1 FAMS @F002@
+0 @I010@ INDI
+1 NAME Elena /Usanova/
+1 SEX F
+1 BIRT
+2 DATE 1987
+2 PLAC Ekaterinburg, Russia
+1 FAMS @F003@
+0 @I011@ INDI
+1 NAME Aaliyah /Barnard/
+1 SEX F
+1 BIRT
+2 DATE 2003
+1 FAMC @F002@
+0 @I012@ INDI
+1 NAME James Jr /Barnard/
+1 SEX M
+1 BIRT
+2 DATE 2006
+1 FAMC @F002@
+0 @I013@ INDI
+1 NAME Ocean /Barnard/
+1 SEX M
+1 BIRT
+2 DATE 2020
+1 FAMC @F003@
+0 @I014@ INDI
+1 NAME Olivia /Gilbertson/
+1 SEX F
+1 BIRT
+2 DATE 1995
+1 NOTE Maternal half-sibling to James & Charlotte Barnard. Daughter of Julie Yeeles from a later relationship after 1989 divorce.
+1 FAMC @F017@
+0 @I015@ INDI
+1 NAME John Owen /Barnard/
+1 TITL Air Commodore RAF
+1 SEX M
+1 NOTE Air Commodore John Owen Barnard. Paternal grandfather of James Barnard.
+1 FAMS @F005@
+1 FAMC @F006@
+0 @I016@ INDI
+1 NAME Elizabeth /Barnard/
+1 SEX F
+1 NOTE Paternal grandmother of James Barnard. Married John Owen Barnard.
+1 FAMS @F005@
+0 @I017@ INDI
+1 NAME Nicholas /Barnard/
+1 SEX M
+1 NOTE Known as Nick. Brother of Richard Mark Barnard.
+1 FAMC @F005@
+0 @I018@ INDI
+1 NAME Judith E A /Barnard/
+1 SEX F
+1 NOTE Married surname: Brueton. Sister of Richard Mark Barnard.
+1 FAMC @F005@
+0 @I019@ INDI
+1 NAME Ernest Thomas /Barnard/
+1 SEX M
+1 FAMS @F006@
+1 FAMC @F007@
+0 @I020@ INDI
+1 NAME Mabel May /Rackham/
+1 SEX F
+1 FAMS @F006@
+0 @I021@ INDI
+1 NAME Mark /Barnard/
+1 SEX M
+1 FAMS @F007@
+0 @I022@ INDI
+1 NAME Mary Elizabeth /Booth/
+1 SEX F
+1 FAMS @F007@
+0 @I023@ INDI
+1 NAME Raymond /Yeeles/
+1 SEX M
+1 BIRT
+2 DATE 1926
+1 DEAT
+2 DATE 2018
+1 NOTE Son of Herbert & Elsie Yeeles. Married Emily Christine "Bunty" Litster 1948. Died aged 92. Had 9 children: Kevin, Lorraine, Julie, Mark, Kathy, Peter, David, Martin, Helen.
+1 FAMS @F008@
+1 FAMC @F009@
+0 @I024@ INDI
+1 NAME Emily Christine /Litster/
+1 SEX F
+1 BIRT
+2 DATE ABT 1926
+1 NOTE Known as "Bunty". Married Raymond Yeeles 1948.
+1 FAMS @F008@
+0 @I025@ INDI
+1 NAME Herbert /Yeeles/
+1 SEX M
+1 BIRT
+2 DATE 1897
+1 DEAT
+2 DATE 1929
+1 FAMS @F009@
+1 FAMC @F010@
+0 @I026@ INDI
+1 NAME Elsie Lavina Dixon /Weichel/
+1 SEX F
+1 FAMS @F009@
+0 @I027@ INDI
+1 NAME George Thomas /Yeeles/
+1 SEX M
+1 BIRT
+2 DATE 1865
+1 DEAT
+2 DATE 1940
+1 FAMS @F010@
+1 FAMC @F011@
+0 @I028@ INDI
+1 NAME Annie Maria /Toghill/
+1 SEX F
+1 BIRT
+2 DATE 1871
+2 PLAC St Catherine, Somerset, England
+1 DEAT
+2 DATE 1954
+1 NOTE Married George Thomas Yeeles 1892. Appears in 1901 census at Wellow, Somerset (RG13/2335).
+1 FAMS @F010@
+0 @I029@ INDI
+1 NAME Henry /Yeeles/
+1 SEX M
+1 BIRT
+2 DATE 1830
+2 PLAC Marshfield, Gloucestershire, England
+1 FAMS @F011@
+1 FAMC @F012@
+0 @I030@ INDI
+1 NAME Jane /Dickenson/
+1 SEX F
+1 BIRT
+2 DATE 1836
+1 NOTE Daughter of Thomas Dickenson & Mary Shewrance. Married Henry Yeeles. Their children included George Thomas (1865), Elizabeth (1859), Mary Selina (1867), Eliza (1869), Sarah Jane (1871), Edith Rose (1879).
+1 FAMS @F011@
+1 FAMC @F013@
+0 @I031@ INDI
+1 NAME Isaac /Yeeles/
+1 SEX M
+1 BIRT
+2 DATE 1807
+2 PLAC Marshfield, Gloucestershire, England
+1 DEAT
+2 DATE 1851
+1 FAMS @F012@
+0 @I032@ INDI
+1 NAME Hannah /Hibbert/
+1 SEX F
+1 BIRT
+2 DATE 1803
+1 DEAT
+2 DATE 1884
+1 FAMS @F012@
+0 @I033@ INDI
+1 NAME Thomas /Dickenson/
+1 SEX M
+1 BIRT
+2 DATE 1800
+1 DEAT
+2 DATE 1878
+1 FAMS @F013@
+1 FAMC @F014@
+0 @I034@ INDI
+1 NAME Mary /Shewrance/
+1 SEX F
+1 FAMS @F013@
+0 @I035@ INDI
+1 NAME William /Dickenson/
+1 SEX M
+1 BIRT
+2 DATE 1766
+1 DEAT
+2 DATE 1844
+1 FAMS @F014@
+1 FAMC @F015@
+0 @I036@ INDI
+1 NAME Mary /Rice/
+1 SEX F
+1 BIRT
+2 DATE 1763
+1 DEAT
+2 DATE 1852
+1 FAMS @F014@
+0 @I037@ INDI
+1 NAME William /Dickenson/
+1 SEX M
+1 BIRT
+2 DATE 1728
+1 DEAT
+2 DATE 1811
+1 FAMS @F015@
+0 @I038@ INDI
+1 NAME Dorothy /Goslett/
+1 SEX F
+1 BIRT
+2 DATE 1722
+1 FAMS @F015@
+0 @I039@ INDI
+1 NAME Kevin /Yeeles/
+1 SEX M
+1 NOTE Kevin R Yeeles. Brother of Julie Yeeles. Electoral roll: Aylesford, Kent (ME20). Source: Kevin Yeeles's MyHeritage Tree (Dickenson Web Site).
+1 FAMS @F016@
+1 FAMC @F008@
+0 @I040@ INDI
+1 NAME Valerie /Yeeles/
+1 SEX F
+1 NOTE Valerie M Yeeles. Wife of Kevin Yeeles.
+1 FAMS @F016@
+0 @I041@ INDI
+1 NAME Nerissa /Yeeles/
+1 SEX F
+1 NOTE Nerissa Y Yeeles. Daughter of Kevin & Valerie Yeeles.
+1 FAMC @F016@
+0 @I042@ INDI
+1 NAME Francesca Elaine /Yeeles/
+1 SEX F
+1 NOTE Daughter of Kevin & Valerie Yeeles. Has since moved to York (YO10 4AD).
+1 FAMC @F016@
+0 @I043@ INDI
+1 NAME Lorraine /Yeeles/
+1 SEX F
+1 FAMC @F008@
+0 @I044@ INDI
+1 NAME Mark /Yeeles/
+1 SEX M
+1 FAMC @F008@
+0 @I045@ INDI
+1 NAME Kathy /Yeeles/
+1 SEX F
+1 FAMC @F008@
+0 @I046@ INDI
+1 NAME Peter /Yeeles/
+1 SEX M
+1 FAMC @F008@
+0 @I047@ INDI
+1 NAME David /Yeeles/
+1 SEX M
+1 FAMC @F008@
+0 @I048@ INDI
+1 NAME Martin /Yeeles/
+1 SEX M
+1 FAMC @F008@
+0 @I049@ INDI
+1 NAME Helen /Yeeles/
+1 SEX F
+1 FAMC @F008@
+0 @F001@ FAM
+1 HUSB @I002@
+1 WIFE @I003@
+1 MARR
+1 DIV
+2 DATE 1989
+1 CHIL @I001@
+1 CHIL @I004@
+0 @F002@ FAM
+1 HUSB @I001@
+1 WIFE @I009@
+1 MARR
+2 DATE 2003
+1 DIV
+2 DATE 2012
+1 CHIL @I011@
+1 CHIL @I012@
+0 @F003@ FAM
+1 HUSB @I001@
+1 WIFE @I010@
+1 MARR
+2 DATE 2018
+1 CHIL @I013@
+0 @F004@ FAM
+1 HUSB @I005@
+1 WIFE @I004@
+1 MARR
+1 CHIL @I006@
+1 CHIL @I007@
+1 CHIL @I008@
+0 @F005@ FAM
+1 HUSB @I015@
+1 WIFE @I016@
+1 CHIL @I002@
+1 CHIL @I017@
+1 CHIL @I018@
+0 @F006@ FAM
+1 HUSB @I019@
+1 WIFE @I020@
+1 CHIL @I015@
+0 @F007@ FAM
+1 HUSB @I021@
+1 WIFE @I022@
+1 CHIL @I019@
+0 @F008@ FAM
+1 HUSB @I023@
+1 WIFE @I024@
+1 MARR
+2 DATE 1948
+1 CHIL @I039@
+1 CHIL @I043@
+1 CHIL @I003@
+1 CHIL @I044@
+1 CHIL @I045@
+1 CHIL @I046@
+1 CHIL @I047@
+1 CHIL @I048@
+1 CHIL @I049@
+0 @F009@ FAM
+1 HUSB @I025@
+1 WIFE @I026@
+1 MARR
+2 DATE 1916
+1 CHIL @I023@
+0 @F010@ FAM
+1 HUSB @I027@
+1 WIFE @I028@
+1 MARR
+2 DATE 1892
+1 CHIL @I025@
+0 @F011@ FAM
+1 HUSB @I029@
+1 WIFE @I030@
+1 CHIL @I027@
+0 @F012@ FAM
+1 HUSB @I031@
+1 WIFE @I032@
+1 CHIL @I029@
+0 @F013@ FAM
+1 HUSB @I033@
+1 WIFE @I034@
+1 CHIL @I030@
+0 @F014@ FAM
+1 HUSB @I035@
+1 WIFE @I036@
+1 CHIL @I033@
+0 @F015@ FAM
+1 HUSB @I037@
+1 WIFE @I038@
+1 CHIL @I035@
+0 @F016@ FAM
+1 HUSB @I039@
+1 WIFE @I040@
+1 CHIL @I041@
+1 CHIL @I042@
+0 @F017@ FAM
+1 WIFE @I003@
+1 CHIL @I014@
+0 TRLR
