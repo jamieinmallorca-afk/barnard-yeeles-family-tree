@@ -309,7 +309,7 @@
   <!-- ══════════════════════════════ -->
   <div class="marriage-bridge">
     <div class="marriage-line">
-      <span>m.</span>
+      <span>m./div.1989</span>
     </div>
   </div>
 
@@ -583,67 +583,103 @@
 
 <div style="display:flex; justify-content:center; gap:32px; flex-wrap:wrap; align-items:flex-start; padding:0 20px 16px; margin-left:-40px;">
 
-  <!-- ── JAMES (single card, both marriages noted) ── -->
+  <!-- ── JAMES — horizontal marriage row: Veronica ← JAMES → Elena ── -->
   <div style="display:flex; flex-direction:column; align-items:center;">
 
-    <div class="card you" style="width:165px;">
-      <div class="you-tag">You</div>
-      <div class="card-icon">♂</div>
-      <div class="card-name">James Barnard</div>
-      <div class="card-dates">b. 1976 · Living</div>
-      <div class="card-note">
-        ① m.2003 Veronica Lechuga<br>
-        &nbsp;&nbsp;&nbsp;div. 2012<br>
-        ② m.2018 Elena Usanova
-      </div>
-      <div class="card-id">G1L7-5Q5</div>
-      <div class="tip">James Barnard · Born 1976 · Living<br>FamilySearch: G1L7-5Q5<br><br>① Married Veronica Lechuga 2003<br>Divorced 2012<br>Children: Aaliyah (b.2003), James Jr (b.2006)<br><br>② Married Elena Usanova 2018<br>Elena born 1987, Ekaterinburg, Russia<br>Child: Ocean Barnard (b.2020)</div>
-    </div>
+    <!-- Marriage row: all three cards side by side -->
+    <div style="display:flex; align-items:center; gap:0;">
 
-    <!-- Connector down to children -->
-    <div style="width:2px; height:22px; background:var(--line);"></div>
-    <!-- Horizontal bar for 3 children -->
-    <div style="position:relative; height:16px; width:460px;">
-      <svg width="100%" height="16" style="overflow:visible; display:block;">
-        <line x1="14%" y1="0" x2="86%" y2="0" stroke="#b8b0a4" stroke-width="1.5"/>
-        <line x1="14%" y1="0" x2="14%" y2="16" stroke="#b8b0a4" stroke-width="1.5"/>
-        <line x1="50%" y1="0" x2="50%" y2="16" stroke="#b8b0a4" stroke-width="1.5"/>
-        <line x1="86%" y1="0" x2="86%" y2="16" stroke="#b8b0a4" stroke-width="1.5"/>
+      <!-- ① Veronica Lechuga (ended marriage) -->
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.57rem; color:var(--text-muted); margin-bottom:4px; text-align:center; letter-spacing:0.04em;">① m.2003 · div.2012</div>
+        <div class="card female" style="border-style:dashed; opacity:0.82; width:148px;">
+          <div class="card-icon">♀</div>
+          <div class="card-name">Veronica Lechuga</div>
+          <div class="card-dates">Living</div>
+          <div class="tip">Veronica Lechuga<br>First wife of James Barnard<br>Married 2003 · Divorced 2012<br>Children: Aaliyah (b.2003), James Jr (b.2006)</div>
+        </div>
+      </div>
+
+      <!-- Connector: dashed (ended marriage) -->
+      <div style="width:44px; flex-shrink:0; border-top:2px dashed #b8b0a4;"></div>
+
+      <!-- James card (centre, transparent label placeholder for alignment) -->
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.57rem; color:transparent; margin-bottom:4px;">—</div>
+        <div class="card you" style="width:160px;">
+          <div class="you-tag">You</div>
+          <div class="card-icon">♂</div>
+          <div class="card-name">James Barnard</div>
+          <div class="card-dates">b. 1976 · Living</div>
+          <div class="card-id">G1L7-5Q5</div>
+          <div class="tip">James Barnard · Born 1976 · Living<br>FamilySearch: G1L7-5Q5<br><br>① Married Veronica Lechuga 2003<br>Divorced 2012<br>Children: Aaliyah (b.2003), James Jr (b.2006)<br><br>② Married Elena Usanova 2018<br>Elena born 1987, Ekaterinburg, Russia<br>Child: Ocean Barnard (b.2020)</div>
+        </div>
+      </div>
+
+      <!-- Connector: solid (current marriage) -->
+      <div style="width:44px; flex-shrink:0; border-top:2px solid var(--line);"></div>
+
+      <!-- ② Elena Usanova (current marriage) -->
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.57rem; color:var(--text-muted); margin-bottom:4px; text-align:center; letter-spacing:0.04em;">② m.2018 · present</div>
+        <div class="card female" style="width:148px;">
+          <div class="card-icon">♀</div>
+          <div class="card-name">Elena Usanova</div>
+          <div class="card-dates">b. 1987 · Ekaterinburg</div>
+          <div class="tip">Elena Usanova<br>Born 1987, Ekaterinburg, Russia<br>Second wife of James Barnard<br>Married 2018<br>Child: Ocean Barnard (b.2020)<br><br>⚑ Elena's Russian family ancestry<br>to be researched — see notes</div>
+        </div>
+      </div>
+
+    </div><!-- /marriage row -->
+
+    <!-- Vertical drops: from under Veronica (74px) and Elena (470px) in a 544px row -->
+    <!-- Row = 148 + 44 + 160 + 44 + 148 = 544px -->
+    <div style="position:relative; width:544px; height:20px;">
+      <svg width="544" height="20" style="display:block; overflow:visible;">
+        <line x1="74"  y1="0" x2="74"  y2="20" stroke="#b8b0a4" stroke-width="1.5"/>
+        <line x1="470" y1="0" x2="470" y2="20" stroke="#b8b0a4" stroke-width="1.5"/>
       </svg>
     </div>
 
-    <div style="display:flex; gap:10px; align-items:flex-start;">
-      <!-- Aaliyah (with Veronica) -->
-      <div style="display:flex; flex-direction:column; align-items:center;">
-        <div class="card female">
-          <div class="card-icon">♀</div>
-          <div class="card-name">Aaliyah Barnard</div>
-          <div class="card-dates">b. 2003 · Living</div>
-          <div class="tip">Aaliyah Barnard<br>b. 2003 · Living<br>Daughter of James &amp; Veronica Lechuga</div>
+    <!-- Children: Aaliyah+James Jr below Veronica side; Ocean below Elena side -->
+    <div style="position:relative; width:544px; min-height:116px; overflow:visible;">
+
+      <!-- Veronica's children (Aaliyah + James Jr) centred at x=74 -->
+      <div style="position:absolute; left:74px; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
+        <div style="position:relative; height:14px; width:306px;">
+          <svg width="306" height="14" style="display:block; overflow:visible;">
+            <line x1="74"  y1="0" x2="232" y2="0" stroke="#b8b0a4" stroke-width="1.5"/>
+            <line x1="74"  y1="0" x2="74"  y2="14" stroke="#b8b0a4" stroke-width="1.5"/>
+            <line x1="232" y1="0" x2="232" y2="14" stroke="#b8b0a4" stroke-width="1.5"/>
+          </svg>
         </div>
-        <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.57rem; color:var(--text-muted); margin-top:3px;">w. Veronica</div>
-      </div>
-      <!-- James Jr (with Veronica) -->
-      <div style="display:flex; flex-direction:column; align-items:center;">
-        <div class="card male">
-          <div class="card-icon">♂</div>
-          <div class="card-name">James Barnard</div>
-          <div class="card-dates">b. 2006 · Living</div>
-          <div class="tip">James Barnard Jr<br>b. 2006 · Living<br>Son of James &amp; Veronica Lechuga</div>
+        <div style="display:flex; gap:10px;">
+          <div class="card female">
+            <div class="card-icon">♀</div>
+            <div class="card-name">Aaliyah Barnard</div>
+            <div class="card-dates">b. 2003 · Living</div>
+            <div class="tip">Aaliyah Barnard<br>b. 2003 · Living<br>Daughter of James &amp; Veronica Lechuga</div>
+          </div>
+          <div class="card male">
+            <div class="card-icon">♂</div>
+            <div class="card-name">James Barnard Jr</div>
+            <div class="card-dates">b. 2006 · Living</div>
+            <div class="tip">James Barnard Jr<br>b. 2006 · Living<br>Son of James &amp; Veronica Lechuga</div>
+          </div>
         </div>
-        <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.57rem; color:var(--text-muted); margin-top:3px;">w. Veronica</div>
       </div>
-      <!-- Ocean (with Elena) -->
-      <div style="display:flex; flex-direction:column; align-items:center;">
+
+      <!-- Elena's child (Ocean) centred at x=470 -->
+      <div style="position:absolute; left:470px; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center;">
         <div class="card male">
           <div class="card-icon">♂</div>
           <div class="card-name">Ocean Barnard</div>
           <div class="card-dates">b. 2020 · Living</div>
           <div class="tip">Ocean Barnard<br>b. 2020 · Living<br>Son of James &amp; Elena Usanova</div>
         </div>
-        <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.57rem; color:var(--text-muted); margin-top:3px;">w. Elena</div>
       </div>
-    </div>
+
+    </div><!-- /children -->
 
   </div><!-- /James family -->
 
@@ -701,33 +737,25 @@
 
   </div><!-- /Charlotte family -->
 
-</div><!-- /Gen 5-6 children of Richard & Julie -->
 
-
-<!-- ═══════════════════════════════════════════════════════ -->
-<!--  OLIVIA GILBERTSON — from Julie's previous relationship -->
-<!--  Shown separately, connected to Julie's line            -->
-<!-- ═══════════════════════════════════════════════════════ -->
-
-<div style="display:flex; justify-content:center; margin-top:24px; margin-bottom:8px;">
-  <div style="border-top:1px dashed var(--border); width:600px; position:relative;">
-    <div style="position:absolute; top:-9px; left:50%; transform:translateX(-50%); background:var(--bg); padding:0 10px; font-family:'Helvetica Neue',sans-serif; font-size:0.62rem; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; white-space:nowrap;">
-      From Julie Yeeles's previous relationship
-    </div>
-  </div>
-</div>
-
-<div style="display:flex; justify-content:center; margin-bottom:32px;">
+  <!-- ── OLIVIA GILBERTSON — half-sibling via Julie's later relationship (post-1989 divorce) ── -->
   <div style="display:flex; flex-direction:column; align-items:center;">
-    <div class="card female" style="border-color:var(--female-border); border-style:dashed; width:162px;">
+    <div style="font-family:'Helvetica Neue',sans-serif; font-size:0.57rem; color:var(--text-muted); text-align:center; letter-spacing:0.04em; line-height:1.4; margin-bottom:4px; max-width:170px;">
+      Julie's later relationship<br>(post-1989 divorce)
+    </div>
+    <div style="width:2px; height:14px; border-left:2px dashed var(--border); margin-bottom:0;"></div>
+    <div class="card female" style="border-style:dashed; width:162px;">
       <div class="card-icon">♀</div>
       <div class="card-name">Olivia Gilbertson</div>
       <div class="card-dates">b. 1995 · Living</div>
       <div class="card-note">Maternal half-sibling<br>to James &amp; Charlotte</div>
-      <div class="tip">Olivia Gilbertson<br>b. 1995 · Living<br>Daughter of Julie Yeeles<br>from a previous relationship<br>Half-sibling to James Barnard &amp; Charlotte Barnard</div>
+      <div class="tip">Olivia Gilbertson<br>b. 1995 · Living<br>Daughter of Julie Yeeles<br>from a later relationship (after 1989 divorce from Richard)<br>Half-sibling to James Barnard &amp; Charlotte Barnard</div>
     </div>
-  </div>
-</div>
+  </div><!-- /Olivia -->
+
+</div><!-- /Gen 5-6 children of Richard & Julie -->
+
+
 
 
 </div><!-- /tree-root -->
